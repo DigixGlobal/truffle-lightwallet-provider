@@ -11,7 +11,7 @@ export default class RpcSubprovider extends RPCProvider {
     const targetUrl = this.rpcUrl;
     const method = payload.method;
     const newPayload = createPayload(payload);
-    if (this.debug) { console.log('=> request\n', payload); }
+    if (this.debug) { console.log('=> request\n', { ...payload, targetUrl }); }
     xhr({
       uri: targetUrl,
       method: 'POST',
