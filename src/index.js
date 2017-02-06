@@ -12,7 +12,7 @@ export default class LightwalletProvider {
     this.engine.addProvider(new RpcSubprovider({ rpcUrl, debug }));
     this.engine.addProvider(new FiltersSubprovider());
     this.engine.addProvider(new NonceTrackerSubprovider());
-    this.engine._fetchLatestBlock();
+    this.engine.start();
   }
   sendAsync(...args) {
     return this.engine.sendAsync(...args);
