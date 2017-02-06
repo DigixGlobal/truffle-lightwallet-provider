@@ -20,12 +20,13 @@ export default class RpcSubprovider extends RPCProvider {
       body: JSON.stringify(newPayload),
       rejectUnauthorized: false,
     }, (err, res, body) => {
+      if (this.debug) { console.log('<= response\n', JSON.parse(body)); }
       if (err) {
         return end(err);
       }
       if (res.statusCode !== 200) {
         const message = `HTTP Error: ${res.statusCode} on ${method}`;
-        return end(new Error(message));
+        return end(message);
       }
       // parse response into raw account
       let data;
@@ -37,7 +38,6 @@ export default class RpcSubprovider extends RPCProvider {
       } catch (err2) {
         return end(err2);
       }
-      if (this.debug) { console.log('<= response\n', data); }
       return end(null, data.result);
     });
   }
