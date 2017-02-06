@@ -6,12 +6,15 @@ export default class RpcSubprovider extends RPCProvider {
   constructor(opts) {
     super(opts);
     this.debug = opts.debug;
+    this.firstRequest = true;
   }
   handleRequest(payload, next, end) {
     const targetUrl = this.rpcUrl;
     const method = payload.method;
     const newPayload = createPayload(payload);
-    if (this.debug) { console.log('=> request\n', { ...payload, targetUrl }); }
+    if (this.debug && !this.firstRequest) { // ignore on first request
+      console.log('=> request\n', { ...payload, targetUrl });
+    }
     xhr({
       uri: targetUrl,
       method: 'POST',
@@ -20,7 +23,8 @@ export default class RpcSubprovider extends RPCProvider {
       body: JSON.stringify(newPayload),
       rejectUnauthorized: false,
     }, (err, res, body) => {
-      if (this.debug) { console.log('<= response\n', JSON.parse(body)); }
+      if (this.debug && !this.firstRequest) { console.log('<= response\n', JSON.parse(body)); }
+      this.firstRequest = false;
       if (err) {
         return end(err);
       }
