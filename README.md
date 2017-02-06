@@ -25,6 +25,6 @@ module.exports = {
 };
 ```
 
-## TODO
+## Sigmate
 
-Document creation of Lightwallet file.
+Check out https://github.com/DigixGlobal/sigmate for a simple eth-lightwallet keystore manager.
