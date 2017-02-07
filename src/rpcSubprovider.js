@@ -23,10 +23,12 @@ export default class RpcSubprovider extends RPCProvider {
       if (this.debug) { console.log('<= response\n', JSON.parse(body)); }
       this.firstRequest = false;
       if (err) {
+        console.log(err);
         return end(err);
       }
       if (res.statusCode !== 200) {
         const message = `HTTP Error: ${res.statusCode} on ${method}`;
+        console.log(message);
         return end(message);
       }
       // parse response into raw account
@@ -34,9 +36,11 @@ export default class RpcSubprovider extends RPCProvider {
       try {
         data = JSON.parse(body);
         if (data.error) {
+          console.log(data);
           return end(data.error);
         }
       } catch (err2) {
+        console.log(err2);
         return end(err2);
       }
       return end(null, data.result);
