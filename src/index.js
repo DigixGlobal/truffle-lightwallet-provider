@@ -19,8 +19,4 @@ export default class LightwalletProvider {
     this.init();
     return this.engine.sendAsync(...args);
   }
-  send(...args) {
-    this.init();
-    return this.engine.send(...args);
-  }
 }
