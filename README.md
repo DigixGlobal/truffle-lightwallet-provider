@@ -17,7 +17,8 @@ module.exports = {
         keystore: '/path/to/my/serialized-eth-lightwallet.json',
         password: 'mySecretDecryptionKey',
         rpcUrl: 'http://ropsten.infura.io/',
-        debug: true,
+        debug: true, // optional, show JSON-RPC logs
+        prefund: 1e18, // optional, fund all lightwallet addresses (via coinbase) with this  of wei
       }),
       network_id: '3',
     },
