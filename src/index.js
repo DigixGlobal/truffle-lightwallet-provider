@@ -17,18 +17,14 @@ export default class LightwalletProvider {
     this.opts.ks = Lightwallet.keystore.deserialize(this.opts.serialized);
     this.opts.addresses = this.opts.ks.getAddresses().map(a => `0x${a}`);
     this.engine = new ProviderEngine();
+    this.engine.addProvider(new LighwalletSubprovider(this.opts));
     this.engine.addProvider(new RpcSubprovider(this.opts));
     this.engine._fetchLatestBlock();
-    const next = () => {
-      // don't attach the lightwallet until we have prefunded
-      this.engine.addProvider(new LighwalletSubprovider(this.opts));
-      cb();
-    };
     if (this.opts.prefund) {
       console.log(`Ensuring all lightwallet accounts have ${this.opts.prefund / 1e18} Ether`);
-      return prefund(this).then(next);
+      return prefund(this.opts).then(cb);
     }
-    return next();
+    return cb();
   }
   sendAsync(...args) {
     return this.init(() => {

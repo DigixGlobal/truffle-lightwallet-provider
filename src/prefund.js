@@ -1,15 +1,22 @@
 import createPayload from 'web3-provider-engine/util/create-payload';
+import ProviderEngine from 'web3-provider-engine';
+import RpcSubprovider from './rpcSubprovider';
 
-export default function prefund({ opts, engine }) {
+
+export default function prefund(opts) {
+  const newEngine = new ProviderEngine();
+  newEngine.addProvider(new RpcSubprovider(opts));
   return new Promise((resolve) => {
-    engine._handleAsync(createPayload({
-      method: 'eth_coinbase',
-    }), (err, res) => resolve(res.result));
+    newEngine._fetchLatestBlock(() => {
+      newEngine._handleAsync(createPayload({
+        method: 'eth_coinbase',
+      }), (err, res) => resolve(res.result));
+    });
   }).then((coinbase) => {
     return Promise.all(opts.addresses.map((address) => {
       // get the balance
       return new Promise((resolve) => {
-        engine._handleAsync(createPayload({
+        newEngine._handleAsync(createPayload({
           method: 'eth_getBalance',
           params: [address],
         }), (err, res) => {
@@ -22,7 +29,7 @@ export default function prefund({ opts, engine }) {
         if (diff === 0) { return null; }
         console.log(`Funding ${address} with ${diff} wei`);
         return new Promise((resolve) => {
-          engine._handleAsync(createPayload({
+          newEngine._handleAsync(createPayload({
             method: 'eth_sendTransaction',
             params: [{ from: coinbase, to: address, value: `0x${diff.toString(16)}` }],
           }), (err, res) => resolve(res.result));
@@ -34,7 +41,7 @@ export default function prefund({ opts, engine }) {
         let pollTime = 10;
         return new Promise((resolve) => {
           function poll() {
-            engine._handleAsync(createPayload({
+            newEngine._handleAsync(createPayload({
               method: 'eth_getTransactionReceipt',
               params: [txHash],
             }), (err, res) => {
