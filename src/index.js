@@ -2,6 +2,9 @@ import fs from 'fs';
 import Lightwallet from 'eth-lightwallet';
 import ProviderEngine from 'web3-provider-engine';
 
+import NonceSubprovider from 'web3-provider-engine/subproviders/nonce-tracker';
+import FilterProvider from 'web3-provider-engine/subproviders/filters';
+// import RpcSubprovider from './rpcSubprovider';
 import RpcSubprovider from './rpcSubprovider';
 import LighwalletSubprovider from './lightwalletSubprovider';
 import prefund from './prefund';
@@ -17,9 +20,12 @@ export default class LightwalletProvider {
     this.opts.ks = Lightwallet.keystore.deserialize(this.opts.serialized);
     this.opts.addresses = this.opts.ks.getAddresses().map(a => `0x${a}`);
     this.engine = new ProviderEngine();
+    this.engine.addProvider(new FilterProvider());
+    this.engine.addProvider(new NonceSubprovider());
     this.engine.addProvider(new LighwalletSubprovider(this.opts));
     this.engine.addProvider(new RpcSubprovider(this.opts));
-    this.engine._fetchLatestBlock();
+    // this.engine._fetchLatestBlock();
+    this.engine.start();
     if (this.opts.prefund) {
       console.log(`Ensuring all lightwallet accounts have ${this.opts.prefund / 1e18} Ether`);
       return prefund(this.opts).then(cb);

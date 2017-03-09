@@ -16,7 +16,7 @@ export default class RpcSubprovider extends RPCProvider {
       uri: targetUrl,
       method: 'POST',
       // use plain text to prevent multiple reqeusts
-      headers: { Accept: 'text/plain', 'Content-Type': 'text/plain' },
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(newPayload),
       rejectUnauthorized: false,
     }, (err, res, body) => {
