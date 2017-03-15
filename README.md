@@ -19,6 +19,7 @@ module.exports = {
         rpcUrl: 'http://ropsten.infura.io/',
         debug: true, // optional, show JSON-RPC logs
         prefund: 1e18, // optional, fund all lightwallet addresses (via coinbase) with this  of wei
+        pollingInterval: 4000 // optional, polling interval for the provider (reduce for faster deploy with testRPC or kovan)
       }),
       network_id: '3',
     },

@@ -19,7 +19,9 @@ export default class LightwalletProvider {
     this.opts.serialized = fs.readFileSync(this.opts.keystore).toString();
     this.opts.ks = Lightwallet.keystore.deserialize(this.opts.serialized);
     this.opts.addresses = this.opts.ks.getAddresses().map(a => `0x${a}`);
-    this.engine = new ProviderEngine();
+    // pass opts
+    const { pollingInterval } = this.opts;
+    this.engine = new ProviderEngine({ pollingInterval });
     this.engine.addProvider(new FilterProvider());
     this.engine.addProvider(new NonceSubprovider());
     this.engine.addProvider(new LighwalletSubprovider(this.opts));
