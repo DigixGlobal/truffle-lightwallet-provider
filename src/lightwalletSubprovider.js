@@ -1,19 +1,6 @@
 import HookedWalletEthTx from 'web3-provider-engine/subproviders/hooked-wallet-ethtx';
 import EthTx from 'ethereumjs-tx';
 import ethUtil from 'ethereumjs-util';
-import sigUtil from 'eth-sig-util';
-
-
-function concatSig(rawV, rawR, rawS) {
-  let r = ethUtil.fromSigned(rawR);
-  let s = ethUtil.fromSigned(rawS);
-  let v = ethUtil.bufferToInt(rawV);
-  r = ethUtil.toUnsigned(r).toString('hex');
-  s = ethUtil.toUnsigned(s).toString('hex');
-  v = ethUtil.stripHexPrefix(ethUtil.intToHex(v));
-  return ethUtil.addHexPrefix(r.concat(s, v).toString('hex'));
-}
-
 
 export default class LightwalletSubprovider extends HookedWalletEthTx {
   constructor({ password, ks, addresses }) {
@@ -24,21 +11,15 @@ export default class LightwalletSubprovider extends HookedWalletEthTx {
     });
 
     this.signMessage = function (msgParams, cb) {
-      ks.keyFromPassword(password, (err, privateKey) => {
+      ks.keyFromPassword(password, (err, pwDerivedKey) => {
         if (err) return cb(err);
-        const msgHash = ethUtil.sha3(msgParams.data);
-        const sig = ethUtil.ecsign(msgHash, privateKey);
-        const serialized = ethUtil.bufferToHex(concatSig(sig.v, sig.r, sig.s));
+        const secretKey = new Buffer(ks.exportPrivateKey(msgParams.from, pwDerivedKey), 'hex');
+        const dataToSign = msgParams.data;
+        const msg = new Buffer(dataToSign.replace('0x', ''), 'hex');
+        const msgHash = ethUtil.hashPersonalMessage(msg);
+        const sgn = ethUtil.ecsign(msgHash, new Buffer(secretKey));
+        const serialized = ethUtil.toRpcSig(sgn.v, sgn.r, sgn.s);
         cb(null, serialized);
-      });
-    };
-
-    this.signPersonalMessage = function (msgParams, cb) {
-      ks.keyFromPassword(password, (err, privateKey) => {
-        if (err) return cb(err);
-        const serialized = sigUtil.personalSign(privateKey, msgParams);
-        cb(null, serialized);
-        return null;
       });
     };
 

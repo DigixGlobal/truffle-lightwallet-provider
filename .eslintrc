@@ -1,14 +1,8 @@
 extends:
   eslint-config-airbnb
-
-settings:
-  ecmascript: 6
-
+env:
+  mocha: true
 rules:
   arrow-body-style: 0
   no-underscore-dangle: 0
   no-console: 0
-
-parserOptions:
-  ecmaFeatures:
-    experimentalObjectRestSpread: true
