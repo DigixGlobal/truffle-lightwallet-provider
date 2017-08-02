@@ -34,6 +34,9 @@ export default class LightwalletProvider {
     }
     return cb();
   }
+  send() {
+    throw new Error('`send` is not supported; use `sendAsync`');
+  }
   sendAsync(...args) {
     return this.init(() => {
       return this.engine.sendAsync(...args);
