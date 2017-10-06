@@ -4,7 +4,6 @@ import ProviderEngine from 'web3-provider-engine';
 
 import NonceSubprovider from 'web3-provider-engine/subproviders/nonce-tracker';
 import FilterProvider from 'web3-provider-engine/subproviders/filters';
-// import RpcSubprovider from './rpcSubprovider';
 import RpcSubprovider from './rpcSubprovider';
 import LighwalletSubprovider from './lightwalletSubprovider';
 import prefund from './prefund';
