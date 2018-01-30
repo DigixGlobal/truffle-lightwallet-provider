@@ -4,8 +4,9 @@
  */
 'use strict';
 
-var has = require('has');
-var Components = require('../util/Components');
+const has = require('has');
+const Components = require('../util/Components');
+const docsUrl = require('../util/docsUrl');
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -16,7 +17,8 @@ module.exports = {
     docs: {
       description: 'Prevent multiple component definition per file',
       category: 'Stylistic Issues',
-      recommended: false
+      recommended: false,
+      url: docsUrl('no-multi-comp')
     },
 
     schema: [{
@@ -31,12 +33,11 @@ module.exports = {
     }]
   },
 
-  create: Components.detect(function(context, components) {
+  create: Components.detect((context, components) => {
+    const configuration = context.options[0] || {};
+    const ignoreStateless = configuration.ignoreStateless || false;
 
-    var configuration = context.options[0] || {};
-    var ignoreStateless = configuration.ignoreStateless || false;
-
-    var MULTI_COMP_MESSAGE = 'Declare only one React component per file';
+    const MULTI_COMP_MESSAGE = 'Declare only one React component per file';
 
     /**
      * Checks if the component is ignored
@@ -57,10 +58,10 @@ module.exports = {
           return;
         }
 
-        var list = components.list();
-        var i = 0;
+        const list = components.list();
+        let i = 0;
 
-        for (var component in list) {
+        for (const component in list) {
           if (!has(list, component) || isIgnored(list[component]) || ++i === 1) {
             continue;
           }

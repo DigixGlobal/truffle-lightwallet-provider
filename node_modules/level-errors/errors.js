@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015 LevelUP contributors
+/* Copyright (c) 2012-2017 LevelUP contributors
  * See list at <https://github.com/rvagg/node-levelup#contributing>
  * MIT License
  * <https://github.com/rvagg/node-levelup/blob/master/LICENSE.md>

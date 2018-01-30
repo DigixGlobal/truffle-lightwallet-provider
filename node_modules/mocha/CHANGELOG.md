@@ -1,9 +1,84 @@
+# 3.5.3 / 2017-09-11
+
+## :bug: Fixes
+
+- [#3003]: Fix invalid entities in xUnit reporter first appearing in v3.5.1 ([@jkrems])
+
+[#3003]: https://github.com/mochajs/mocha/pull/3003
+
+# 3.5.2 / 2017-09-10
+
+## :bug: Fixes
+
+- [#3001]: Fix AMD-related failures first appearing in v3.5.1 ([@boneskull])
+
+[#3001]: https://github.com/mochajs/mocha/pull/3001
+
+# 3.5.1 / 2017-09-09
+
+## :newspaper: News
+
+- :mega: Mocha is now sponsoring [PDXNode](http://pdxnode.org)!  If you're in the [Portland](https://wikipedia.org/wiki/Portland,_Oregon) area, come check out the monthly talks and hack nights!
+
+## :bug: Fixes
+
+- [#2997]: Fix missing `xit` export for "require" interface ([@solodynamo])
+- [#2957]: Fix unicode character handling in XUnit reporter failures ([@jkrems])
+
+## :nut_and_bolt: Other
+
+- [#2986]: Add issue and PR templates ([@kungapal])
+- [#2918]: Drop bash dependency for glob-related tests ([@ScottFreeCode])
+- [#2922]: Improve `--compilers` coverage ([@ScottFreeCode])
+- [#2981]: Fix tpyos and spelling errors ([@jsoref])
+ 
+[#2997]: https://github.com/mochajs/mocha/pull/2997
+[#2957]: https://github.com/mochajs/mocha/pull/2957
+[#2918]: https://github.com/mochajs/mocha/pull/2918
+[#2986]: https://github.com/mochajs/mocha/pull/2986
+[#2922]: https://github.com/mochajs/mocha/pull/2922
+[#2981]: https://github.com/mochajs/mocha/pull/2981
+[@solodynamo]: https://github.com/solodynamo
+[@jkrems]: https://github.com/jkrems
+[@jsoref]: https://github.com/jsoref
+
+# 3.5.0 / 2017-07-31
+
+## :newspaper: News
+
+- Mocha now has a [code of conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) (thanks [@kungapal]!).
+- Old issues and PRs are now being marked "stale" by [Probot's "Stale" plugin](https://github.com/probot/stale).  If an issue is marked as such, and you would like to see it remain open, simply add a new comment to the ticket or PR.
+- **WARNING**: Support for non-ES5-compliant environments will be dropped starting with version 4.0.0 of Mocha!
+
+## :lock: Security Fixes
+
+- [#2860]: Address [CVE-2015-8315](https://nodesecurity.io/advisories/46) via upgrade of [debug](https://npm.im/debug) ([@boneskull])
+
+## :tada: Enhancements
+
+- [#2696]: Add `--forbid-only` and `--forbid-pending` flags.  Use these in CI or hooks to ensure tests aren't accidentally being skipped! ([@charlierudolph])
+- [#2813]: Support Node.js 8's `--napi-modules` flag ([@jupp0r])
+
+## :nut_and_bolt: Other
+
+- Various CI-and-test-related fixes and improvements ([@boneskull], [@dasilvacontin], [@PopradiArpad], [@Munter], [@ScottFreeCode])
+- "Officially" support Node.js 8 ([@elergy])
+
+[#2860]: https://github.com/mochajs/mocha/pulls/2860
+[#2696]: https://github.com/mochajs/mocha/pulls/2696
+[#2813]: https://github.com/mochajs/mocha/pulls/2813
+[@charlierudolph]: https://github.com/charlierudolph
+[@PopradiArpad]: https://github.com/PopradiArpad
+[@kungapal]: https://github.com/kungapal
+[@elergy]: https://github.com/elergy
+[@jupp0r]: https://github.com/jupp0r
+
 # 3.4.2 / 2017-05-24
 
 ## :bug: Fixes
 
-- [#2802]: Remove call to deprecated os.tmpDir ([@makepanic])
-- [#2820]: Eagerly set process.exitCode ([@chrisleck])
+- [#2802]: Remove call to deprecated `os.tmpDir` ([@makepanic])
+- [#2820]: Eagerly set `process.exitCode` ([@chrisleck])
 
 ## :nut_and_bolt: Other
 
@@ -13,6 +88,7 @@
 [@makepanic]: https://github.com/makepanic
 [@Munter]: https://github.com/Munter
 
+[#2778]: https://github.com/mochajs/mocha/pulls/2778
 [#2802]: https://github.com/mochajs/mocha/issues/2802
 [#2820]: https://github.com/mochajs/mocha/pull/2820
 
@@ -831,7 +907,7 @@ Thanks @entertainyou, @SimenB, @just-paja for the heads-up.
   * utils.stringify should handle objects without an Object prototype
   * in runnable test, comparing to undefined error's message rather than a literal
   * Fix test running output truncation on async STDIO
-  * ammended for deprecated customFds option in child_process
+  * amended for deprecated customFds option in child_process
 
 2.1.0 / 2014-12-23
 ==================
@@ -1059,7 +1135,7 @@ Thanks @entertainyou, @SimenB, @just-paja for the heads-up.
 ==================
 
   * add: sort test files with --sort (#813)
-  * update: diff depedency to 1.0.7
+  * update: diff dependency to 1.0.7
   * update: glob dependency to 3.2.3 (#927)
   * fix: diffs show whitespace differences (#976)
   * fix: improve global leaks (#783)

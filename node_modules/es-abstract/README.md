@@ -1,4 +1,4 @@
-#es-abstract <sup>[![Version Badge][npm-version-svg]][package-url]</sup>
+# es-abstract <sup>[![Version Badge][npm-version-svg]][package-url]</sup>
 
 [![Build Status][travis-svg]][travis-url]
 [![dependency status][deps-svg]][deps-url]
@@ -12,7 +12,7 @@
 
 ECMAScript spec abstract operations.
 When different versions of the spec conflict, the default export will be the latest version of the abstract operation.
-All abstract operations will also be available under an `es5`/`es6`/`es7` exported property if you require a specific version.
+All abstract operations will also be available under an `es5`/`es2015`/`es2016` entry point, and exported property, if you require a specific version.
 
 ## Example
 

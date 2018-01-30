@@ -44,9 +44,9 @@ var lowerBoundKey = exports.lowerBoundKey = function (range) {
     )
 }
 
-var lowerBound = exports.lowerBound = function (range) {
+var lowerBound = exports.lowerBound = function (range, def) {
   var k = lowerBoundKey(range)
-  return k && range[k]
+  return k ? range[k] : def
 }
 
 var lowerBoundInclusive = exports.lowerBoundInclusive = function (range) {
@@ -78,9 +78,30 @@ var upperBoundKey = exports.upperBoundKey = function (range) {
     )
 }
 
-var upperBound = exports.upperBound = function (range) {
+var upperBound = exports.upperBound = function (range, def) {
   var k = upperBoundKey(range)
-  return k && range[k]
+  return k ? range[k] : def
+}
+
+exports.start = function (range, def) {
+  return range.reverse ? upperBound(range, def) : lowerBound(range, def)
+}
+exports.end = function (range, def) {
+  return range.reverse ? lowerBound(range, def) : upperBound(range, def)
+}
+exports.startInclusive = function (range) {
+  return (
+    range.reverse
+  ? upperBoundInclusive(range)
+  : lowerBoundInclusive(range)
+  )
+}
+exports.endInclusive = function (range) {
+  return (
+    range.reverse
+  ? lowerBoundInclusive(range)
+  : upperBoundInclusive(range)
+  )
 }
 
 function id (e) { return e }
@@ -144,8 +165,5 @@ exports.filter = function (range, compare) {
     return exports.contains(range, key, compare)
   }
 }
-
-
-
 
 

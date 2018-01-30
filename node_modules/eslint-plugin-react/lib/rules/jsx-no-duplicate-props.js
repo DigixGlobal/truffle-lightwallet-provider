@@ -5,7 +5,8 @@
 
 'use strict';
 
-var has = require('has');
+const has = require('has');
+const docsUrl = require('../util/docsUrl');
 
 // ------------------------------------------------------------------------------
 // Rule Definition
@@ -16,7 +17,8 @@ module.exports = {
     docs: {
       description: 'Enforce no duplicate props',
       category: 'Possible Errors',
-      recommended: true
+      recommended: true,
+      url: docsUrl('jsx-no-duplicate-props')
     },
 
     schema: [{
@@ -31,20 +33,23 @@ module.exports = {
   },
 
   create: function (context) {
-
-    var configuration = context.options[0] || {};
-    var ignoreCase = configuration.ignoreCase || false;
+    const configuration = context.options[0] || {};
+    const ignoreCase = configuration.ignoreCase || false;
 
     return {
       JSXOpeningElement: function (node) {
-        var props = {};
+        const props = {};
 
-        node.attributes.forEach(function(decl) {
+        node.attributes.forEach(decl => {
           if (decl.type === 'JSXSpreadAttribute') {
             return;
           }
 
-          var name = decl.name.name;
+          let name = decl.name.name;
+
+          if (typeof name !== 'string') {
+            return;
+          }
 
           if (ignoreCase) {
             name = name.toLowerCase();

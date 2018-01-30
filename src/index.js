@@ -17,7 +17,8 @@ export default class LightwalletProvider {
     this.initialized = true;
     this.opts.serialized = fs.readFileSync(this.opts.keystore).toString();
     this.opts.ks = Lightwallet.keystore.deserialize(this.opts.serialized);
-    this.opts.addresses = this.opts.ks.getAddresses().map(a => `0x${a}`);
+    // this.opts.addresses = this.opts.ks.getAddresses().map(a => `0x${a}`);
+    this.opts.addresses = this.opts.ks.getAddresses().map(a => a); // removed prefix 0x
     // pass opts
     const { pollingInterval } = this.opts;
     this.engine = new ProviderEngine({ pollingInterval });

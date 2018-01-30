@@ -237,6 +237,37 @@ tape('bounds and inclusive', function (t) {
 })
 
 
+tape('start, end', function (t) {
+//  t.equal(ltgt.upperBound({start: 'b', reverse: true}), 'b')
+//  t.equal(ltgt.upperBoundInclusive({start: 'b', reverse: true}), true)
+//  t.equal(ltgt.upperBound({end: 'b', reverse: false}), 'b')
+//
+//  t.equal(ltgt.lowerBound({start: 'b', reverse: true}), undefined)
+//  t.equal(ltgt.lowerBound({end: 'b', reverse: false}), undefined)
+//  t.equal(ltgt.upperBoundInclusive({start: 'b', reverse: true}), true)
+//  t.equal(ltgt.upperBoundInclusive({end: 'b', reverse: false}), true)
+
+  t.equal(ltgt.start({lt: 'b', reverse: true}), 'b')
+  t.equal(ltgt.start({lte: 'b', reverse: true}), 'b')
+  t.equal(ltgt.end({lt: 'b', reverse: true}, null), null)
+  t.equal(ltgt.end({lte: 'b', reverse: true}, null), null)
+
+  t.equal(ltgt.end({lt: 'b'}), 'b')
+  t.equal(ltgt.end({lte: 'b'}), 'b')
+  t.equal(ltgt.start({lt: 'b'}, undefined), undefined)
+  t.equal(ltgt.start({lte: 'b'}, undefined), undefined)
+
+  t.equal(ltgt.endInclusive({lt: 'b'}), false)
+
+  t.equal(ltgt.endInclusive({lte: 'b'}), true)
+
+  t.equal(ltgt.startInclusive({gt: 'b'}), false)
+  t.equal(ltgt.startInclusive({gte: 'b'}), true)
+
+
+  t.end()
+})
+
 
 var strings = ['00', '01', '02']
 var sranges = [
@@ -343,12 +374,6 @@ function createLtgtTests(mutate) {
 
 tape('toLtgt - immutable', createLtgtTests(false))
 tape('toLtgt - mutable', createLtgtTests(true))
-
-
-
-
-
-
 
 
 

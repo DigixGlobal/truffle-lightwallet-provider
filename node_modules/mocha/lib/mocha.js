@@ -204,6 +204,7 @@ Mocha.prototype.ui = function (name) {
     exports.before = context.before || context.suiteSetup;
     exports.describe = context.describe || context.suite;
     exports.it = context.it || context.test;
+    exports.xit = context.xit || context.test.skip;
     exports.setup = context.setup || context.beforeEach;
     exports.suiteSetup = context.suiteSetup || context.before;
     exports.suiteTeardown = context.suiteTeardown || context.after;
@@ -484,6 +485,24 @@ Mocha.prototype.delay = function delay () {
 };
 
 /**
+ * Tests marked only fail the suite
+ * @returns {Mocha}
+ */
+Mocha.prototype.forbidOnly = function () {
+  this.options.forbidOnly = true;
+  return this;
+};
+
+/**
+ * Pending tests and tests marked skip fail the suite
+ * @returns {Mocha}
+ */
+Mocha.prototype.forbidPending = function () {
+  this.options.forbidPending = true;
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @api public
@@ -504,6 +523,8 @@ Mocha.prototype.run = function (fn) {
   runner.hasOnly = options.hasOnly;
   runner.asyncOnly = options.asyncOnly;
   runner.allowUncaught = options.allowUncaught;
+  runner.forbidOnly = options.forbidOnly;
+  runner.forbidPending = options.forbidPending;
   if (options.grep) {
     runner.grep(options.grep, options.invert);
   }

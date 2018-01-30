@@ -142,7 +142,9 @@ module.exports = {
     }],
 
     // disallow use of multiple spaces
-    'no-multi-spaces': 'error',
+    'no-multi-spaces': ['error', {
+      // ignoreEOLComments: false, // TODO: uncomment once v3 is dropped
+    }],
 
     // disallow use of multiline strings
     'no-multi-str': 'error',
@@ -205,7 +207,7 @@ module.exports = {
     }],
 
     // disallow use of assignment in return statement
-    'no-return-assign': 'error',
+    'no-return-assign': ['error', 'always'],
 
     // disallow redundant `return await`
     'no-return-await': 'error',
