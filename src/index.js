@@ -9,10 +9,11 @@ import LighwalletSubprovider from './lightwalletSubprovider';
 import prefund from './prefund';
 
 export default class LightwalletProvider {
-  constructor(opts) {
+  constructor (opts) {
     this.opts = opts;
   }
-  init(cb) {
+
+  init (cb) {
     if (this.initialized) { return cb(); }
     this.initialized = true;
     this.opts.serialized = fs.readFileSync(this.opts.keystore).toString();
@@ -34,10 +35,11 @@ export default class LightwalletProvider {
     }
     return cb();
   }
-  send() {
+
+  send () {
     throw new Error('`send` is not supported; use `sendAsync`');
   }
-  sendAsync(...args) {
+  sendAsync (...args) {
     return this.init(() => {
       return this.engine.sendAsync(...args);
     });
