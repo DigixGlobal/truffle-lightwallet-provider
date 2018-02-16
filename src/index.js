@@ -30,6 +30,13 @@ export default class LightwalletProvider {
           this.addresses = this.opts.ks.getAddresses();
           cb(null, this.addresses)
         });
+      },
+      getPrivateKey: (address, cb) => {
+        this.opts.ks.keyFromPassword(this.opts.password, (err, pwDerivedKey) => {
+          if (err) return cb(err);
+          const secretKey = Buffer.from(this.opts.ks.exportPrivateKey(address, pwDerivedKey), 'hex');
+          cb(null, secretKey);
+        });
       }
     }));
     this.engine.addProvider(new FiltersSubprovider());
@@ -45,7 +52,6 @@ export default class LightwalletProvider {
   }
 
   getAddress (idx) {
-    console.log('test');
     if (!idx) return this.addresses[0];
     return this.addresses[idx];
   }
