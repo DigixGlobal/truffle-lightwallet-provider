@@ -16,7 +16,7 @@ const web3 = new Web3(new LightWalletProvider({
   keystore: path.join(__dirname, 'sigmate-v3-test.json'),
   password: 'test',
   rpcUrl: 'http://localhost:6545/',
-  pollingInterval: 5000,
+  pollingInterval: 5000
 }));
 
 describe('truffle-lightwallet-provider', function () {
