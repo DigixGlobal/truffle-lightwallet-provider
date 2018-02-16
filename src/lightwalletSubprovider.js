@@ -3,11 +3,11 @@ import EthTx from 'ethereumjs-tx';
 import ethUtil from 'ethereumjs-util';
 
 export default class LightwalletSubprovider extends HookedWalletEthTx {
-  constructor({ password, ks, addresses }) {
+  constructor ({ password, ks, addresses }) {
     super({
-      getAccounts(cb) {
+      getAccounts (cb) {
         return cb(null, addresses.slice(0));
-      },
+      }
     });
 
     this.signMessage = function (msgParams, cb) {

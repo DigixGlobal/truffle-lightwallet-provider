@@ -2,44 +2,61 @@ import fs from 'fs';
 import Lightwallet from 'eth-lightwallet';
 import ProviderEngine from 'web3-provider-engine';
 
-import NonceSubprovider from 'web3-provider-engine/subproviders/nonce-tracker';
-import FilterProvider from 'web3-provider-engine/subproviders/filters';
-import RpcSubprovider from './rpcSubprovider';
-import LighwalletSubprovider from './lightwalletSubprovider';
-import prefund from './prefund';
+var FiltersSubprovider = require('web3-provider-engine/subproviders/filters.js');
+var HookedSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js');
+var Web3Subprovider = require('web3-provider-engine/subproviders/web3.js');
+var Web3 = require('web3');
+var Transaction = require('ethereumjs-tx');
 
 export default class LightwalletProvider {
-  constructor(opts) {
+  constructor (opts) {
     this.opts = opts;
+    this.init();
   }
-  init(cb) {
-    if (this.initialized) { return cb(); }
-    this.initialized = true;
+
+  init () {
     this.opts.serialized = fs.readFileSync(this.opts.keystore).toString();
     this.opts.ks = Lightwallet.keystore.deserialize(this.opts.serialized);
-    // this.opts.addresses = this.opts.ks.getAddresses().map(a => `0x${a}`);
-    this.opts.addresses = this.opts.ks.getAddresses().map(a => a); // removed prefix 0x
-    // pass opts
-    const { pollingInterval } = this.opts;
-    this.engine = new ProviderEngine({ pollingInterval });
-    this.engine.addProvider(new FilterProvider());
-    this.engine.addProvider(new NonceSubprovider());
-    this.engine.addProvider(new LighwalletSubprovider(this.opts));
-    this.engine.addProvider(new RpcSubprovider(this.opts));
-    // this.engine._fetchLatestBlock();
-    this.engine.start();
-    if (this.opts.prefund) {
-      console.log(`Ensuring all lightwallet accounts have ${this.opts.prefund / 1e18} Ether`);
-      return prefund(this.opts).then(cb);
-    }
-    return cb();
-  }
-  send() {
-    throw new Error('`send` is not supported; use `sendAsync`');
-  }
-  sendAsync(...args) {
-    return this.init(() => {
-      return this.engine.sendAsync(...args);
+    this.opts.ks.keyFromPassword(this.opts.password, (err, pwDerivedKey) => {
+      if (err) throw err;
+      this.addresses = this.opts.ks.getAddresses();
     });
+
+    this.engine = new ProviderEngine();
+    this.engine.addProvider(new HookedSubprovider({
+      getAccounts: (cb) => {
+        this.opts.ks.keyFromPassword(this.opts.password, (err, pwDerivedKey) => {
+          if (err) throw err;
+          this.addresses = this.opts.ks.getAddresses();
+          cb(null, this.addresses)
+        });
+      },
+      getPrivateKey: (address, cb) => {
+        this.opts.ks.keyFromPassword(this.opts.password, (err, pwDerivedKey) => {
+          if (err) return cb(err);
+          const secretKey = Buffer.from(this.opts.ks.exportPrivateKey(address, pwDerivedKey), 'hex');
+          cb(null, secretKey);
+        });
+      }
+    }));
+    this.engine.addProvider(new FiltersSubprovider());
+    this.engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(this.opts.rpcUrl)));
+    this.engine.start(); // Required by the provider engine.
+  }
+
+  send () {
+    return this.engine.sendAsync.apply(this.engine, arguments);
+  }
+  sendAsync () {
+    this.engine.sendAsync.apply(this.engine, arguments);
+  }
+
+  getAddress (idx) {
+    if (!idx) return this.addresses[0];
+    return this.addresses[idx];
+  }
+
+  getAddresses () {
+    return this.addresses;
   }
 }
